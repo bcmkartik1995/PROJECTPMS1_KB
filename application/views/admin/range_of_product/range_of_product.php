@@ -8,8 +8,7 @@ if (!empty($created) || !empty($edited)){
 <div class="nav-tabs-custom">
     <!-- Tabs within a box -->
     <ul class="nav nav-tabs">
-        <li class="<?= $active == 1 ? 'active' : ''; ?>"><a href="#manage"
-                                                            data-toggle="tab">All Range Of Product</a></li>
+        <li class="<?= $active == 1 ? 'active' : ''; ?>"><a href="<?php echo base_url(); ?>admin/range_of_product/range_of_product">All Range Of Product</a></li>
         <li class="<?= $active == 2 ? 'active' : ''; ?>"><a href="#create"
                                                             data-toggle="tab">New Range Of Product</a></li>
     </ul>

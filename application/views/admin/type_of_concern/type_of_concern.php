@@ -1,16 +1,16 @@
 <?= message_box('success'); ?>
 <?= message_box('error');
-$created = can_action('163', 'created');
-$edited = can_action('163', 'edited');
-$deleted = can_action('163', 'deleted');
+$created = can_action('165', 'created');
+$edited = can_action('165', 'edited');
+$deleted = can_action('165', 'deleted');
 if (!empty($created) || !empty($edited)){
 ?>
 <div class="nav-tabs-custom">
     <!-- Tabs within a box -->
     <ul class="nav nav-tabs">
-        <li class="<?= $active == 1 ? 'active' : ''; ?>"><a href="<?php echo base_url(); ?>admin/uom/uom_list">All UOM</a></li>
+        <li class="<?= $active == 1 ? 'active' : ''; ?>"><a href="<?php echo base_url(); ?>admin/type_of_concern/type_of_concern">All Type of concern</a></li>
         <li class="<?= $active == 2 ? 'active' : ''; ?>"><a href="#create"
-                                                            data-toggle="tab">New UOM</a></li>
+                                                            data-toggle="tab">New Type of concern</a></li>
     </ul>
     <style type="text/css">
         .custom-bulk-button {
@@ -23,7 +23,7 @@ if (!empty($created) || !empty($edited)){
             <?php } else { ?>
             <div class="panel panel-custom">
                 <header class="panel-heading ">
-                    <div class="panel-title"><strong>All UOM</strong></div>
+                    <div class="panel-title"><strong>All Type of concern</strong></div>
                 </header>
                 <?php } ?>
                 <div class="table-responsive">
@@ -49,8 +49,8 @@ if (!empty($created) || !empty($edited)){
                         </tbody>
                         <script type="text/javascript">
                             $(document).ready(function () {
-                                list = base_url + "admin/uom/uomlist";
-                                bulk_url = base_url + "admin/uom/bulk_delete";
+                                list = base_url + "admin/type_of_concern/type_of_concernlist";
+                                bulk_url = base_url + "admin/type_of_concern/bulk_delete";
                             });
                         </script>
                     </table>
@@ -59,9 +59,9 @@ if (!empty($created) || !empty($edited)){
             <?php if (!empty($created) || !empty($edited)) { ?>
                 <div class="tab-pane <?= $active == 2 ? 'active' : ''; ?>" id="create">
                     <form role="form" data-parsley-validate="" novalidate="" enctype="multipart/form-data" id="form"
-                          action="<?php echo base_url(); ?>admin/uom/save_uom/<?php
-                          if (!empty($uom_info)) {
-                              echo $uom_info->id;
+                          action="<?php echo base_url(); ?>admin/type_of_concern/save_tc/<?php
+                          if (!empty($TConcern_info)) {
+                              echo $TConcern_info->id;
                           }
                           ?>" method="post" class="form-horizontal  ">
 
@@ -71,8 +71,8 @@ if (!empty($created) || !empty($edited)){
                                         class="text-danger">*</span></label>
                                 <div class="col-lg-4">
                                     <input type="text" class="form-control" value="<?php
-                                    if (!empty($uom_info)) {
-                                        echo $uom_info->name;
+                                    if (!empty($TConcern_info)) {
+                                        echo $TConcern_info->name;
                                     }
                                     ?>" name="name" required="">
                                 </div>
@@ -80,8 +80,8 @@ if (!empty($created) || !empty($edited)){
                             </div>
                 
                             <?php
-                            if (!empty($uom_info)) {
-                                $rpid = $uom_info->id;
+                            if (!empty($TConcern_info)) {
+                                $rpid = $TConcern_info->id;
                             } else {
                                 $rpid = null;
                             }
@@ -91,7 +91,7 @@ if (!empty($created) || !empty($edited)){
                             
                             <div class="btn-bottom-toolbar text-right">
                                 <?php
-                                if (!empty($uom_info)) { ?>
+                                if (!empty($TConcern_info)) { ?>
                                     <button type="submit"
                                             class="btn btn-sm btn-primary"><?= lang('updates') ?></button>
                                     <button type="button" onclick="goBack()"
