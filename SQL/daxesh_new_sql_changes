@@ -24,3 +24,4 @@ ALTER TABLE `tbl_vendor` CHANGE `ohsasa18001` `ohsasa18001` TINYINT(4) NULL DEFA
 ALTER TABLE `tbl_vendor` CHANGE `other` `other` TINYINT(4) NULL DEFAULT '0';
 ALTER TABLE `tbl_vendor` CHANGE `is_relative_working_uwob` `is_relative_working_uwob` TINYINT(4) NULL DEFAULT '0';
 
+ALTER TABLE `tbl_vendor` ADD `approve_status` INT NOT NULL DEFAULT '1' COMMENT '1-Inactive/Pending\r\n2-Approved\r\n3-Rejected' AFTER `range_of_products`;

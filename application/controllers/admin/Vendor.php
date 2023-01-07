@@ -41,12 +41,134 @@ class Vendor extends Admin_Controller
         $this->load->view('admin/_layout_main', $data);
  
     }
+
+    public function NewVendorList()
+    {
+        $data['title'] = "New Vendors";
+        $data['assign_user'] = $this->Vendor_model->allowed_user('165');
+
+        $data['Vendor_info'] = $this->Vendor_model->check_by(array('id' => $id), 'tbl_vendor');
+
+        
+        $data['subview'] = $this->load->view('admin/vendor/new_vendors_list', $data, TRUE);
+
+        $this->load->view('admin/_layout_main', $data);
+ 
+    }
+
+    public function InactiveVendorList()
+    {
+        
+         if ($this->input->is_ajax_request()) {
+            $this->load->model('datatables');
+            $this->datatables->table = 'tbl_vendor';
+            
+            $action_array = array('id');
+            $where = array('approve_status' => '1');
+            $this->datatables->order = array('id' => 'asc');
+
+            $fetch_data = $this->datatables->get_datatable_permission($where);
+
+            $data = array();
+
+            foreach ($fetch_data as $_key => $Vendor) {
+                
+                $sub_array = array();
+
+                $vendor_name = null;
+                $vendor_name .= '<strong class="block">' . $Vendor->vendor_name . '</strong>';
+
+                $sub_array[] = $vendor_name;
+                $sub_array[] = $Vendor->company_name;
+                $sub_array[] = $Vendor->designation;
+                $sub_array[] = $Vendor->email;
+                $sub_array[] = $Vendor->mobile;
+                $action = btn_view('admin/vendor/vendor_details/' . $Vendor->id) . ' <a href="'.base_url().'admin/vendor/approve_vendor/'.$Vendor->id.'" class="btn btn-info btn-xs" style="background-color:#27c24c;" data-toggle="tooltip" data-placement="top" title="Approve">Approve</a> <a href="'.base_url().'admin/vendor/reject_vendor/'.$Vendor->id.'" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="Reject">Reject</a>';
+                $sub_array[] = $action;
+                $data[] = $sub_array;
+            }
+
+            render_table($data);
+        } else {
+            redirect('admin/dashboard');
+        }
+ 
+    }
+
+    public function vendor_details($id, $active = NULL, $op_id = NULL)
+    {
+        $data['title'] = 'vendor details';
+        //get all task information
+        $data['vendor_details'] = $this->Vendor_model->check_by(array('id' => $id), 'tbl_vendor');
+
+        if($data['vendor_details']->type_of_concern_id != null && $data['vendor_details']->type_of_concern_id != 0 && $data['vendor_details']->type_of_concern_id != ''){
+
+            $tConcern = $this->Vendor_model->check_by(array('id' => $data['vendor_details']->type_of_concern_id), 'tbl_type_of_concern');
+            $data['vendor_details']->type_of_concern_id = $tConcern->name;
+        } else {
+            $data['vendor_details']->type_of_concern_id = "";
+        }
+
+        if($data['vendor_details']->bussiness_activity_id != null && $data['vendor_details']->bussiness_activity_id != 0 && $data['vendor_details']->bussiness_activity_id != ''){
+
+            $business = $this->Vendor_model->check_by(array('id' => $data['vendor_details']->bussiness_activity_id), 'tbl_bussiness_activities');
+            $data['vendor_details']->bussiness_activity_id = $business->name;
+        } else {
+            $data['vendor_details']->bussiness_activity_id = "";
+        }
+
+        $data['vendor_details']->iso9001 = $data['vendor_details']->iso9001 == 1 ? "True" : "False" ;
+        $data['vendor_details']->iso140011 = $data['vendor_details']->iso140011 == 1 ? "True" : "False" ;
+        $data['vendor_details']->ohsasa18001 = $data['vendor_details']->ohsasa18001 == 1 ? "True" : "False" ;
+        $data['vendor_details']->other = $data['vendor_details']->other == 1 ? "True" : "False" ;
+        $data['vendor_details']->is_relative_working_uwob = $data['vendor_details']->is_relative_working_uwob == 1 ? "YES" : "NO" ;
+
+        
+        if($data['vendor_details']->range_of_products != null && $data['vendor_details']->range_of_products != 0 && $data['vendor_details']->range_of_products != ''){
+
+            $product = $this->Vendor_model->check_by(array('id' => $data['vendor_details']->range_of_products), 'tbl_range_of_product');
+            $data['vendor_details']->range_of_products = $product->name;
+        } else {
+            $data['vendor_details']->range_of_products = "";
+        }
+
+        $data['subview'] = $this->load->view('admin/vendor/vendor_details', $data, TRUE);
+        $this->load->view('admin/_layout_main', $data);
+    }
+
+    public function approve_vendor($id, $bulk = null)
+    {
+         
+        $this->Vendor_model->_table_name = 'tbl_vendor';
+        $this->Vendor_model->_primary_key = 'id';
+
+        $data = $this->Vendor_model->array_from_post(array('approve_status'));
+        $data['approve_status'] = 2;
+        $return_id = $this->Vendor_model->save($data, $id);
+        $message = "Vendor Approved successfully";
+        set_message('success', $message);
+        redirect('admin/vendor/vendor');
+    }
+    public function reject_vendor($id, $bulk = null)
+    {
+         
+        $this->Vendor_model->_table_name = 'tbl_vendor';
+        $this->Vendor_model->_primary_key = 'id';
+
+        $data = $this->Vendor_model->array_from_post(array('approve_status'));
+        $data['approve_status'] = 3;
+        $return_id = $this->Vendor_model->save($data, $id);
+        $message = "Vendor Rejected successfully";
+        set_message('success', $message);
+        redirect('admin/vendor/vendor');
+    }
+
     public function save_vendor($id = NULL)
     {
         $this->Vendor_model->_table_name = 'tbl_vendor';
         $this->Vendor_model->_primary_key = 'id';
 
-        $data = $this->Vendor_model->array_from_post(array('vendor_name','company_name', 'work_address', 'office_address', 'type_of_concern_id', 'contact_person', 'designation', 'mobile', 'telephone', 'email', 'week_of', 'vendor_status', 'remark', 'bussiness_activity_id', 'pancard', 'gstin', 'iso9001', 'iso140011', 'ohsasa18001', 'other', 'iso9001m', 'iso140011m', 'ohsasa18001m', 'otherm', 'is_relative_working_uwob', 'name', 'designationi', 'date', 'sign_with_seal', 'range_of_products'));
+        $data = $this->Vendor_model->array_from_post(array('vendor_name','company_name', 'work_address', 'office_address', 'type_of_concern_id', 'contact_person', 'designation', 'mobile', 'telephone', 'email', 'week_of', 'vendor_status', 'remark', 'bussiness_activity_id', 'pancard', 'gstin', 'iso9001', 'iso140011', 'ohsasa18001', 'other', 'iso9001m', 'iso140011m', 'ohsasa18001m', 'otherm', 'is_relative_working_uwob', 'name', 'designationi', 'date', 'sign_with_seal', 'range_of_products','approve_status'));
         
         
         $config['upload_path']   = './uploads/vendor/'; 
@@ -85,10 +207,8 @@ class Vendor extends Admin_Controller
                  $data['sign_with_seal'] = $_FILES['sign_with_seal']['name'];
              } 
         }
-            //echo "<pre>";print_r($data);die;
-
-
-
+            
+        $data['approve_status'] = 1;
         // update root category
         $where = array('email' => $data['email']);
         // duplicate value check in DB
@@ -173,11 +293,11 @@ class Vendor extends Admin_Controller
             $this->load->model('datatables');
             $this->datatables->table = 'tbl_vendor';
             $custom_field = 0;
-            $main_column = array('company_name', 'work_address', 'office_address', 'type_of_concern_id', 'contact_person', 'designation', 'mobile', 'telephone', 'email', 'week_of', 'vendor_status', 'remark', 'bussiness_activity_id', 'pancard', 'gstin', 'iso9001', 'iso140011', 'ohsasa18001', 'other', 'iso9001m', 'iso140011m', 'ohsasa18001m', 'otherm', 'is_relative_working_uwob', 'name', 'designationi', 'date', 'sign_with_seal', 'range_of_products');
+            $main_column = array('company_name', 'work_address', 'office_address', 'type_of_concern_id', 'contact_person', 'designation', 'mobile', 'telephone', 'email', 'week_of', 'vendor_status', 'remark', 'bussiness_activity_id', 'pancard', 'gstin', 'iso9001', 'iso140011', 'ohsasa18001', 'other', 'iso9001m', 'iso140011m', 'ohsasa18001m', 'otherm', 'is_relative_working_uwob', 'name', 'designationi', 'date', 'sign_with_seal', 'range_of_products','approve_status');
             $action_array = array('id');
             $result = array_merge($main_column, $custom_field, $action_array);
-             $this->datatables->column_order = array('company_name', 'work_address', 'office_address', 'type_of_concern_id', 'contact_person', 'designation', 'mobile', 'telephone', 'email', 'week_of', 'vendor_status', 'remark', 'bussiness_activity_id', 'pancard', 'gstin', 'iso9001', 'iso140011', 'ohsasa18001', 'other', 'iso9001m', 'iso140011m', 'ohsasa18001m', 'otherm', 'is_relative_working_uwob', 'name', 'designationi', 'date', 'sign_with_seal', 'range_of_products');
-            $this->datatables->column_search = array('company_name', 'work_address', 'office_address', 'type_of_concern_id', 'contact_person', 'designation', 'mobile', 'telephone', 'email', 'week_of', 'vendor_status', 'remark', 'bussiness_activity_id', 'pancard', 'gstin', 'iso9001', 'iso140011', 'ohsasa18001', 'other', 'iso9001m', 'iso140011m', 'ohsasa18001m', 'otherm', 'is_relative_working_uwob', 'name', 'designationi', 'date', 'sign_with_seal', 'range_of_products');
+             $this->datatables->column_order = array('company_name', 'work_address', 'office_address', 'type_of_concern_id', 'contact_person', 'designation', 'mobile', 'telephone', 'email', 'week_of', 'vendor_status', 'remark', 'bussiness_activity_id', 'pancard', 'gstin', 'iso9001', 'iso140011', 'ohsasa18001', 'other', 'iso9001m', 'iso140011m', 'ohsasa18001m', 'otherm', 'is_relative_working_uwob', 'name', 'designationi', 'date', 'sign_with_seal', 'range_of_products','approve_status');
+            $this->datatables->column_search = array('company_name', 'work_address', 'office_address', 'type_of_concern_id', 'contact_person', 'designation', 'mobile', 'telephone', 'email', 'week_of', 'vendor_status', 'remark', 'bussiness_activity_id', 'pancard', 'gstin', 'iso9001', 'iso140011', 'ohsasa18001', 'other', 'iso9001m', 'iso140011m', 'ohsasa18001m', 'otherm', 'is_relative_working_uwob', 'name', 'designationi', 'date', 'sign_with_seal', 'range_of_products','approve_status');
             $this->datatables->order = array('id' => 'desc');
 
             $fetch_data = $this->datatables->get_datatable_permission();
@@ -202,12 +322,19 @@ class Vendor extends Admin_Controller
                 if (!empty($deleted)) {
                     $sub_array[] = '<div class="checkbox c-checkbox" ><label class="needsclick"> <input value="' . $Vendor->id . '" type="checkbox"><span class="fa fa-check"></span></label></div>';
                 }
-
+                if($Vendor->approve_status == 3){
+                    $Vendor->approve_status = "Rejected";
+                } elseif ($Vendor->approve_status == 2) {
+                    $Vendor->approve_status = "Approved";
+                } else {
+                    $Vendor->approve_status = "Pending";
+                }
                 $sub_array[] = $vendor_name;
                 $sub_array[] = $Vendor->company_name;
                 $sub_array[] = $Vendor->designation;
                 $sub_array[] = $Vendor->email;
                 $sub_array[] = $Vendor->mobile;
+                $sub_array[] = $Vendor->approve_status;
 
                 
                 $custom_form_table = custom_form_table(8, $Vendor->id);

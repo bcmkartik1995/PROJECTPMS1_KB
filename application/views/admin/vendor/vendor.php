@@ -44,6 +44,7 @@ if (!empty($created) || !empty($edited)){
                             <th>Designation</th>
                             <th>Email</th>
                             <th>Mobile</th>
+                            <th>Status</th>
                             
                             <th class="col-options no-sort"><?= lang('action') ?></th>
                         </tr>
