@@ -229,11 +229,13 @@ class Vendor extends Admin_Controller
         } else { // save and update query
             //echo "<pre>";print_r($data);die;
             $return_id = $this->Vendor_model->save($data, $id);
+
             //echo $this->db->last_query();die;
             if (!empty($id)) {
                 $id = $id;
                 $msg = "Vendor updated successfully";
             } else {
+                $this->send_email_to_vendor($data['email']);
                 $id = $return_id;
                 $msg = "Vendor added successfully";
             }
@@ -248,6 +250,46 @@ class Vendor extends Admin_Controller
         redirect('admin/vendor/vendor');
 
     }
+    public function send_email_to_vendor($to_email){
+        $config = array();
+        
+        // Send email
+        $config['useragent'] = 'UniqueCoder LTD';
+        $config['mailpath'] = "/usr/bin/sendmail"; // or "/usr/sbin/sendmail"
+        $config['wordwrap'] = TRUE;
+        $config['mailtype'] = "html";
+        $config['charset'] = 'utf-8';
+        $config['newline'] = "\r\n";
+        $config['crlf'] = "\r\n";
+        $config['smtp_timeout'] = '30';
+        $config['protocol'] = config_item('protocol');
+        $config['smtp_host'] = config_item('smtp_host');
+        $config['smtp_port'] = 587;
+        $config['smtp_user'] = trim(config_item('smtp_user'));
+        $config['smtp_pass'] = decrypt(config_item('smtp_pass'));
+        $config['smtp_crypto'] = config_item('smtp_encryption');
+
+        //Load email library
+        $this->load->library('email');
+        $this->email->clear();
+        //$this->email->from(config_item('company_email'), config_item('company_name'));
+        $this->email->from(config_item('company_email'), config_item('company_name'));
+        $this->email->to("daxgoswami33@gmail.com");
+        $this->email->subject('Vendor Added');
+        $this->email->message('The email sent to you because your vendor account has been added into system successfully! waiting for admin to accept you as vendor');
+        $this->email->send();
+        //Send mail
+        if($this->email->send())
+        {
+            echo "1";die;
+        } else {
+             $error = show_error($this->email->print_debugger());
+            echo "<pre>";print_r($error);die;
+        }
+        
+
+    }
+
 
     public function delete_vendor($id, $bulk = null)
     {

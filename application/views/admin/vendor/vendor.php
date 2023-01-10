@@ -126,7 +126,7 @@ if (!empty($created) || !empty($edited)){
                                     $TConcerns = $this->db->order_by('id', 'ASC')->get('tbl_type_of_concern')->result();
                                     
                                     $select = '<select class="selectpicker" data-width="100%" name="type_of_concern_id" required>';
-                                    $select .= '<option value="0">-- Select -- </option>';
+                                    $select .= '<option value="">-- Select -- </option>';
                                     foreach ($TConcerns as $concern) {
                                         $selected = '';
                                         if (!empty($Vendor_info->type_of_concern_id) && $Vendor_info->type_of_concern_id != NULL) {
@@ -179,7 +179,7 @@ if (!empty($created) || !empty($edited)){
                                     if (!empty($Vendor_info)) {
                                         echo $Vendor_info->telephone;
                                     }
-                                    ?>" name="telephone" required="">
+                                    ?>" name="telephone">
                                 </div>
                             </div>
 
@@ -187,7 +187,7 @@ if (!empty($created) || !empty($edited)){
                                 <label class="col-lg-2 control-label">Email ID <span
                                         class="text-danger">*</span></label>
                                 <div class="col-lg-4">
-                                    <input type="text" class="form-control" value="<?php
+                                    <input type="email" class="form-control" value="<?php
                                     if (!empty($Vendor_info)) {
                                         echo $Vendor_info->email;
                                     }
@@ -197,7 +197,7 @@ if (!empty($created) || !empty($edited)){
                                         class="text-danger">*</span></label>
                                 <div class="col-lg-4">
                                     <select class="selectpicker" data-width="100%" name="week_of" required="" >
-                                        <option value="0">-- Select -- </option>
+                                        <option value="">-- Select -- </option>
                                         <option value="1" <?= $Vendor_info->week_of == 1 ? 'selected' : ''; ?>>Monday </option>
                                         <option value="2" <?= $Vendor_info->week_of == 2 ? 'selected' : ''; ?>>Tuesday </option>
                                         <option value="3" <?= $Vendor_info->week_of == 3 ? 'selected' : ''; ?>>Wednesday </option>
@@ -245,7 +245,7 @@ if (!empty($created) || !empty($edited)){
                                     $bussinessA = $this->db->order_by('id', 'ASC')->get('tbl_bussiness_activities')->result();
                                     
                                     $select = '<select class="selectpicker" data-width="100%" name="bussiness_activity_id" required="" >';
-                                    $select .= '<option value="0">-- Select -- </option>';
+                                    $select .= '<option value="">-- Select -- </option>';
                                     foreach ($bussinessA as $bus) {
                                         $selected = '';
                                         if (!empty($Vendor_info->bussiness_activity_id) && $Vendor_info->bussiness_activity_id != NULL) {
@@ -356,7 +356,7 @@ if (!empty($created) || !empty($edited)){
                                     $products = $this->db->order_by('id', 'ASC')->get('tbl_range_of_product')->result();
                                     
                                     $select = '<select class="selectpicker" data-width="100%" name="range_of_products" required="">';
-                                    $select .= '<option value="0">-- Select -- </option>';
+                                    $select .= '<option value="">-- Select -- </option>';
                                     foreach ($products as $product) {
                                         $selected = '';
                                         if (!empty($Vendor_info->range_of_products) && $Vendor_info->range_of_products != NULL) {
