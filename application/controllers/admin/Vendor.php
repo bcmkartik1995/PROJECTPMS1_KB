@@ -279,13 +279,13 @@ class Vendor extends Admin_Controller
         $this->email->message('The email sent to you because your vendor account has been added into system successfully! waiting for admin to accept you as vendor');
         $this->email->send();
         //Send mail
-        if($this->email->send())
+        /*if($this->email->send())
         {
             echo "1";die;
         } else {
              $error = show_error($this->email->print_debugger());
             echo "<pre>";print_r($error);die;
-        }
+        }*/
         
 
     }
