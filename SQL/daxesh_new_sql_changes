@@ -25,3 +25,16 @@ ALTER TABLE `tbl_vendor` CHANGE `other` `other` TINYINT(4) NULL DEFAULT '0';
 ALTER TABLE `tbl_vendor` CHANGE `is_relative_working_uwob` `is_relative_working_uwob` TINYINT(4) NULL DEFAULT '0';
 
 ALTER TABLE `tbl_vendor` ADD `approve_status` INT NOT NULL DEFAULT '1' COMMENT '1-Inactive/Pending\r\n2-Approved\r\n3-Rejected' AFTER `range_of_products`;
+
+
+INSERT INTO `tbl_menu`(`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (167,'Product Type','admin/product_type/product_type','fa fa-plus','0','35','2023-01-18 11:19:49',1);
+
+
+INSERT INTO `tbl_menu`(`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (168,'Product Category','admin/product_category/product_category','fa fa-plus','0','36','2023-01-18 11:20:49',1);
+
+CREATE TABLE `1pms`.`tbl_product_type` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(255) NOT NULL , `status` BOOLEAN NOT NULL DEFAULT TRUE , `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+CREATE TABLE `1pms`.`tbl_product_category` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(255) NOT NULL , `status` BOOLEAN NOT NULL DEFAULT TRUE , `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+INSERT INTO `tbl_menu`(`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (169,'New Vendors','admin/vendor/NewVendorList','fa fa-plus','0','35','2023-01-19 00:05:49',0);
