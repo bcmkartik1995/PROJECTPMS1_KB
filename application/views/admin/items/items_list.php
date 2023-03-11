@@ -267,6 +267,52 @@ if (!empty($created) || !empty($edited)){
                             ?>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Range Of Product</label>
+                        <div class="col-lg-5">
+                            <?php
+
+                            $products = $this->db->order_by('id', 'ASC')->get('tbl_range_of_product')->result();
+                            
+                            $select = '<select class="selectpicker" data-width="100%" name="range_of_product_id" >';
+                            $select .= '<option value="0">-- Select -- </option>';
+                            foreach ($products as $product) {
+                                $selected = '';
+                                if (!empty($items_info->range_of_product_id) && $items_info->range_of_product_id != NULL) {
+                                    if ($product->id == $items_info->range_of_product_id) {
+                                        $selected = ' selected ';
+                                    }
+                                }
+                                $select .= '<option value="' . $product->id . '"' . $selected . '>' . $product->name . '</option>';
+                            }
+                            $select .= '</select>';
+                            echo $select;
+                            ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">uom</label>
+                        <div class="col-lg-5">
+                            <?php
+
+                            $uoms = $this->db->order_by('id', 'ASC')->get('tbl_uom')->result();
+                            
+                            $select = '<select class="selectpicker" data-width="100%" name="uom_id" >';
+                            $select .= '<option value="0">-- Select -- </option>';
+                            foreach ($uoms as $uom) {
+                                $selected = '';
+                                if (!empty($items_info->uom_id) && $items_info->uom_id != NULL) {
+                                    if ($uom->id == $items_info->uom_id) {
+                                        $selected = ' selected ';
+                                    }
+                                }
+                                $select .= '<option value="' . $uom->id . '"' . $selected . '>' . $uom->name . '</option>';
+                            }
+                            $select .= '</select>';
+                            echo $select;
+                            ?>
+                        </div>
+                    </div>
                     <?php
                     if (!empty($items_info)) {
                         $saved_items_id = $items_info->saved_items_id;

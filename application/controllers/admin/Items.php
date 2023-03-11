@@ -128,7 +128,7 @@ class Items extends Admin_Controller
         $this->items_model->_table_name = 'tbl_saved_items';
         $this->items_model->_primary_key = 'saved_items_id';
 
-        $data = $this->items_model->array_from_post(array('item_name', 'item_desc', 'hsn_code', 'unit_cost', 'unit_type', 'customer_group_id', 'quantity'));
+        $data = $this->items_model->array_from_post(array('item_name', 'item_desc', 'hsn_code', 'unit_cost', 'unit_type', 'customer_group_id', 'quantity', 'range_of_product_id', 'uom_id'));
         $tax_rates = $this->input->post('tax_rates_id', true);
         $total_tax = 0;
         if (!empty($tax_rates)) {
@@ -162,6 +162,7 @@ class Items extends Admin_Controller
             $data['item_tax_total'] = ($total_tax / 100) * $sub_total;
             $data['total_cost'] = $sub_total + $data['item_tax_total'];
             $return_id = $this->items_model->save($data, $id);
+           // echo $this->db->last_query();die;
 
             save_custom_field(18, $id);
 

@@ -3,13 +3,13 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Range_of_product extends Admin_Controller
+class Type_of_concern extends Admin_Controller
 {
 
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Range_of_product_model');
+        $this->load->model('Type_of_concern_model');
 
         $this->load->helper('ckeditor');
         $this->data['ckeditor'] = array(
@@ -23,60 +23,60 @@ class Range_of_product extends Admin_Controller
         );
     }
 
-    public function range_of_product($id = NULL, $opt = null)
+    public function type_of_concern($id = NULL, $opt = null)
     {
-        $data['title'] = "All range of product";
-        $data['assign_user'] = $this->Range_of_product_model->allowed_user('162');
+        $data['title'] = "All type of concern";
+        $data['assign_user'] = $this->Type_of_concern_model->allowed_user('165');
          if (!empty($id)) {
             $data['active'] = 2;
-            $can_edit = $this->Range_of_product_model->can_action('tbl_range_of_product', 'edit', array('id' => $id));
+            $can_edit = $this->Type_of_concern_model->can_action('tbl_type_of_concern', 'edit', array('id' => $id));
             if (!empty($can_edit)) {
-                $data['RProduct_info'] = $this->Range_of_product_model->check_by(array('id' => $id), 'tbl_range_of_product');
+                $data['TConcern_info'] = $this->Type_of_concern_model->check_by(array('id' => $id), 'tbl_type_of_concern');
             }
         } else {
             $data['active'] = 1;
         }
 
-        $data['subview'] = $this->load->view('admin/range_of_product/range_of_product', $data, TRUE);
+        $data['subview'] = $this->load->view('admin/type_of_concern/type_of_concern', $data, TRUE);
         $this->load->view('admin/_layout_main', $data);
  
     }
-    public function save_product($id = NULL)
+    public function save_tc($id = NULL)
     {
-        $created = can_action('162', 'created');
-        $edited = can_action('162', 'edited');
+        $created = can_action('165', 'created');
+        $edited = can_action('165', 'edited');
         if (!empty($created) || !empty($edited) && !empty($id)) {
-            $this->Range_of_product_model->_table_name = 'tbl_range_of_product';
-            $this->Range_of_product_model->_primary_key = 'id';
+            $this->Type_of_concern_model->_table_name = 'tbl_type_of_concern';
+            $this->Type_of_concern_model->_primary_key = 'id';
 
-            $data = $this->Range_of_product_model->array_from_post(array('name'));
+            $data = $this->Type_of_concern_model->array_from_post(array('name'));
             
             // update root category
             $where = array('name' => $data['name']);
             // duplicate value check in DB
 
             if (!empty($id)) { // if id exist in db update data
-                $Productid = array('id !=' => $id);
+                $TConcernId = array('id !=' => $id);
             } else { // if id is not exist then set id as null
-                $Productid = null;
+                $TConcernId = null;
             }
 
             // check whether this input data already exist or not
-            $check_product = $this->Range_of_product_model->check_update('tbl_range_of_product', $where, $Productid);
+            $check_tc = $this->Type_of_concern_model->check_update('tbl_type_of_concern', $where, $TConcernId);
 
-            if (!empty($check_product)) { // if input data already exist show error alert
+            if (!empty($check_tc)) { // if input data already exist show error alert
                 // massage for user
                 $type = 'error';
                 $msg = "<strong style='color:#000'>" . $data['name'] . '</strong>  ' . lang('already_exist');
             } else { // save and update query
-                $return_id = $this->Range_of_product_model->save($data, $id);
+                $return_id = $this->Type_of_concern_model->save($data, $id);
 
                 if (!empty($id)) {
                     $id = $id;
-                    $msg = "Range of product updated successfully";
+                    $msg = "Type of concern updated successfully";
                 } else {
                     $id = $return_id;
-                    $msg = "Range of product added successfully";
+                    $msg = "Type of concern added successfully";
                 }
                 save_custom_field(8, $id);
 
@@ -87,20 +87,20 @@ class Range_of_product extends Admin_Controller
             $message = $msg;
             set_message($type, $message);
         }
-        redirect('admin/range_of_product/range_of_product');
+        redirect('admin/type_of_concern/type_of_concern');
 
     }
 
-    public function delete_RProduct($id, $bulk = null)
+    public function delete_tc($id, $bulk = null)
     {
-        $deleted = can_action('162', 'deleted');
+        $deleted = can_action('165', 'deleted');
         if (!empty($deleted)) {
             
-            $this->Range_of_product_model->_table_name = 'tbl_range_of_product';
-            $this->Range_of_product_model->_primary_key = 'id';
-            $this->Range_of_product_model->delete($id);
+            $this->Type_of_concern_model->_table_name = 'tbl_type_of_concern';
+            $this->Type_of_concern_model->_primary_key = 'id';
+            $this->Type_of_concern_model->delete($id);
             $type = 'success';
-            $message = "Range of product deleted successfully.";
+            $message = "Type of concern deleted successfully.";
         } else {
             $type = "error";
             $message = lang('no_permission');
@@ -117,7 +117,7 @@ class Range_of_product extends Admin_Controller
         $selected_id = $this->input->post('ids', true);
         if (!empty($selected_id)) {
             foreach ($selected_id as $id) {
-                $result[] = $this->delete_RProduct($id, true);
+                $result[] = $this->delete_tc($id, true);
             }
             echo json_encode($result);
             exit();
@@ -129,11 +129,11 @@ class Range_of_product extends Admin_Controller
         }
     }
 
-    public function range_of_productlist($type = null){
+    public function type_of_concernlist($type = null){
     {
         if ($this->input->is_ajax_request()) {
             $this->load->model('datatables');
-            $this->datatables->table = 'tbl_range_of_product';
+            $this->datatables->table = 'tbl_type_of_concern';
             $custom_field = 0;
             $main_column = array('name', 'status');
             $action_array = array('id');
@@ -146,29 +146,29 @@ class Range_of_product extends Admin_Controller
 
             $data = array();
 
-            $edited = can_action('162', 'edited');
-            $deleted = can_action('162', 'deleted');
-            foreach ($fetch_data as $_key => $RProduct) {
+            $edited = can_action('165', 'edited');
+            $deleted = can_action('165', 'deleted');
+            foreach ($fetch_data as $_key => $TConcern) {
                 $action = null;
-                $can_edit = $this->Range_of_product_model->can_action('tbl_range_of_product', 'edit', array('id' => $RProduct->id));
-                $can_delete = $this->Range_of_product_model->can_action('tbl_range_of_product', 'delete', array('id' => $RProduct->id));
+                $can_edit = $this->Type_of_concern_model->can_action('tbl_type_of_concern', 'edit', array('id' => $TConcern->id));
+                $can_delete = $this->Type_of_concern_model->can_action('tbl_type_of_concern', 'delete', array('id' => $TConcern->id));
 
                 
 
                 $sub_array = array();
 
                 $name = null;
-                $name .= '<strong class="block">' . $RProduct->name . '</strong>';
+                $name .= '<strong class="block">' . $TConcern->name . '</strong>';
 
                 
                 if (!empty($deleted)) {
-                    $sub_array[] = '<div class="checkbox c-checkbox" ><label class="needsclick"> <input value="' . $RProduct->id . '" type="checkbox"><span class="fa fa-check"></span></label></div>';
+                    $sub_array[] = '<div class="checkbox c-checkbox" ><label class="needsclick"> <input value="' . $TConcern->id . '" type="checkbox"><span class="fa fa-check"></span></label></div>';
                 }
 
                 $sub_array[] = $name;
 
                 
-                $custom_form_table = custom_form_table(8, $RProduct->id);
+                $custom_form_table = custom_form_table(8, $TConcern->id);
 
                 if (!empty($custom_form_table)) {
                     foreach ($custom_form_table as $c_label => $v_fields) {
@@ -177,10 +177,10 @@ class Range_of_product extends Admin_Controller
                 }
                 
                 if (!empty($can_edit) && !empty($edited)) {
-                    $action .= btn_edit('admin/range_of_product/range_of_product/' . $RProduct->id) . ' ';
+                    $action .= btn_edit('admin/type_of_concern/type_of_concern/' . $TConcern->id) . ' ';
                 }
                 if (!empty($can_delete) && !empty($deleted)) {
-                    $action .= ajax_anchor(base_url("admin/range_of_product/delete_RProduct/$RProduct->id"), "<i class='btn btn-xs btn-danger fa fa-trash-o'></i>", array("class" => "", "title" => lang('delete'), "data-fade-out-on-success" => "#table_" . $_key)) . ' ';
+                    $action .= ajax_anchor(base_url("admin/type_of_concern/delete_tc/$TConcern->id"), "<i class='btn btn-xs btn-danger fa fa-trash-o'></i>", array("class" => "", "title" => lang('delete'), "data-fade-out-on-success" => "#table_" . $_key)) . ' ';
                 }
                 if (!empty($can_edit) && !empty($edited)) {
                     $action .= $change_status;

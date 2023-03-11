@@ -1,0 +1,40 @@
+CREATE TABLE `1pms`.`tbl_range_of_product` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(255) NOT NULL , `status` BOOLEAN NOT NULL DEFAULT TRUE , `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+CREATE TABLE `1pms`.`tbl_uom` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(255) NOT NULL , `status` BOOLEAN NOT NULL DEFAULT TRUE , `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+INSERT INTO `tbl_menu`(`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (164,'Bussiness Activites','admin/bussiness_activities/bussiness_activities','fa fa-plus','0','32','2022-12-27 11:00:36',1);
+
+INSERT INTO `tbl_menu`(`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (165,'Type Of Concern','admin/type_of_concern/type_of_concern','fa fa-plus','0','33','2022-12-27 11:00:39',1);
+
+CREATE TABLE `1pms`.`tbl_bussiness_activities` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(255) NOT NULL , `status` BOOLEAN NOT NULL DEFAULT TRUE , `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+CREATE TABLE `1pms`.`tbl_type_of_concern` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(255) NOT NULL , `status` BOOLEAN NOT NULL DEFAULT TRUE , `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+ALTER TABLE `tbl_saved_items` ADD `range_of_product_id` INT NULL DEFAULT NULL AFTER `saved_items_id`, ADD `uom_id` INT NULL DEFAULT NULL AFTER `range_of_product_id`;
+
+INSERT INTO `tbl_menu`(`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (166,'Vendor','admin/vendor/vendor','fa fa-plus','0','34','2022-12-28 11:05:49',1);
+
+
+CREATE TABLE `1pms`.`tbl_vendor` ( `id` INT NOT NULL AUTO_INCREMENT , `vendor_name` VARCHAR(255) NOT NULL , `company_name` VARCHAR(255) NOT NULL , `work_address` TEXT NOT NULL , `office_address` TEXT NOT NULL , `type_of_concern_id` INT NOT NULL , `contact_person` VARCHAR(255) NOT NULL , `designation` VARCHAR(255) NOT NULL , `mobile` VARCHAR(255) NOT NULL , `telephone` VARCHAR(255) NULL DEFAULT NULL , `email` VARCHAR(255) NOT NULL , `week_of` INT NOT NULL , `vendor_status` TINYINT NOT NULL DEFAULT '1' , `remark` TEXT NULL DEFAULT NULL , `bussiness_activity_id` INT NOT NULL , `pancard` VARCHAR(255) NOT NULL , `gstin` VARCHAR(255) NOT NULL , `iso9001` TINYINT NOT NULL DEFAULT '0' , `iso140011` TINYINT NOT NULL DEFAULT '0' , `ohsasa18001` TINYINT NOT NULL DEFAULT '0' , `other` TINYINT NOT NULL DEFAULT '0' , `iso9001m` VARCHAR(255) NULL DEFAULT NULL , `iso140011m` VARCHAR(255) NULL DEFAULT NULL , `ohsasa18001m` VARCHAR(255) NULL DEFAULT NULL , `otherm` VARCHAR(255) NULL DEFAULT NULL , `is_relative_working_uwob` TINYINT NOT NULL DEFAULT '0' , `name` VARCHAR(255) NOT NULL , `designationi` VARCHAR(255) NOT NULL , `date` DATE NOT NULL , `sign_with_seal` VARCHAR(255) NULL DEFAULT NULL , `range_of_products` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+ALTER TABLE `tbl_vendor` CHANGE `iso9001` `iso9001` TINYINT(4) NULL DEFAULT '0';
+ALTER TABLE `tbl_vendor` CHANGE `iso140011` `iso140011` TINYINT(4) NULL DEFAULT '0';
+ALTER TABLE `tbl_vendor` CHANGE `ohsasa18001` `ohsasa18001` TINYINT(4) NULL DEFAULT '0';
+ALTER TABLE `tbl_vendor` CHANGE `other` `other` TINYINT(4) NULL DEFAULT '0';
+ALTER TABLE `tbl_vendor` CHANGE `is_relative_working_uwob` `is_relative_working_uwob` TINYINT(4) NULL DEFAULT '0';
+
+ALTER TABLE `tbl_vendor` ADD `approve_status` INT NOT NULL DEFAULT '1' COMMENT '1-Inactive/Pending\r\n2-Approved\r\n3-Rejected' AFTER `range_of_products`;
+
+
+INSERT INTO `tbl_menu`(`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (167,'Product Type','admin/product_type/product_type','fa fa-plus','0','35','2023-01-18 11:19:49',1);
+
+
+INSERT INTO `tbl_menu`(`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (168,'Product Category','admin/product_category/product_category','fa fa-plus','0','36','2023-01-18 11:20:49',1);
+
+CREATE TABLE `1pms`.`tbl_product_type` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(255) NOT NULL , `status` BOOLEAN NOT NULL DEFAULT TRUE , `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+CREATE TABLE `1pms`.`tbl_product_category` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(255) NOT NULL , `status` BOOLEAN NOT NULL DEFAULT TRUE , `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+INSERT INTO `tbl_menu`(`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (169,'New Vendors','admin/vendor/NewVendorList','fa fa-plus','0','35','2023-01-19 00:05:49',0);
