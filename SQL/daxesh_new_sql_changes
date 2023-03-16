@@ -38,3 +38,18 @@ CREATE TABLE `1pms`.`tbl_product_category` ( `id` INT NOT NULL AUTO_INCREMENT , 
 
 
 INSERT INTO `tbl_menu`(`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (169,'New Vendors','admin/vendor/NewVendorList','fa fa-plus','0','35','2023-01-19 00:05:49',0);
+
+
+INSERT INTO `tbl_menu` (`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (170, 'Procurement', '#', 'fa fa-layers', '0', '8', '2023-01-23 23:41:52', '1');
+
+INSERT INTO `tbl_menu` (`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (171, 'Indent', 'admin/indent/indent', 'fa fa-layers', '170', '0', '2023-01-23 23:49:52', '1');
+
+INSERT INTO `tbl_menu` (`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (172, 'Inquiry', 'admin/inquiry/inquiry', 'fa fa-layers', '170', '1', '2023-01-23 23:50:52', '1');
+
+INSERT INTO `tbl_menu` (`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (173, 'Inquiry Vs Quotation', 'admin/inq_vs_quo/inqvsquo', 'fa fa-layers', '170', '2', '2023-01-23 23:52:52', '1');
+
+INSERT INTO `tbl_menu` (`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (174, 'Quotation Approve', 'admin/quotation_approve/quotation_approve', 'fa fa-layers', '170', '3', '2023-01-23 23:55:52', '1');
+
+INSERT INTO `tbl_menu` (`menu_id`, `label`, `link`, `icon`, `parent`, `sort`, `time`, `status`) VALUES (175, 'Work order', 'admin/work_order/work_order', 'fa fa-layers', '170', '4', '2023-01-23 23:59:52', '1');
+
+CREATE TABLE `1pms`.`tbl_indent` ( `id` INT NOT NULL AUTO_INCREMENT , `indent_no` VARCHAR(255) NOT NULL , `project` INT NOT NULL , `date` DATE NOT NULL , `indent_due_date` DATE NOT NULL , `project_initiation_date` DATE NOT NULL , `created_by` VARCHAR(255) NOT NULL , `Narration` VARCHAR(255) NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;

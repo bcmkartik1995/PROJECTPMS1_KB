@@ -5,7 +5,7 @@
  *
  * @author NaYeM
  */
-class Indent_Model extends MY_Model
+class Indent_model extends MY_Model
 {
 
     public $_table_name;
